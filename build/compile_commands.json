@@ -1,0 +1,32 @@
+[
+{
+  "directory": "/home/boopy/dev/Projects/QuadTree Demo/build/src",
+  "command": "/usr/bin/c++  -I\"/home/boopy/dev/Projects/QuadTree Demo/src/include\" -g -std=c++26 -O2 -Wall -Wextra -o CMakeFiles/QuadTreeDemo.dir/QuadTreeDemo.cpp.o -c \"/home/boopy/dev/Projects/QuadTree Demo/src/QuadTreeDemo.cpp\"",
+  "file": "/home/boopy/dev/Projects/QuadTree Demo/src/QuadTreeDemo.cpp",
+  "output": "src/CMakeFiles/QuadTreeDemo.dir/QuadTreeDemo.cpp.o"
+},
+{
+  "directory": "/home/boopy/dev/Projects/QuadTree Demo/build/src",
+  "command": "/usr/bin/c++  -I\"/home/boopy/dev/Projects/QuadTree Demo/src/include\" -g -std=c++26 -O2 -Wall -Wextra -o CMakeFiles/QuadTreeDemo.dir/CameraController.cpp.o -c \"/home/boopy/dev/Projects/QuadTree Demo/src/CameraController.cpp\"",
+  "file": "/home/boopy/dev/Projects/QuadTree Demo/src/CameraController.cpp",
+  "output": "src/CMakeFiles/QuadTreeDemo.dir/CameraController.cpp.o"
+},
+{
+  "directory": "/home/boopy/dev/Projects/QuadTree Demo/build/src",
+  "command": "/usr/bin/c++  -I\"/home/boopy/dev/Projects/QuadTree Demo/src/include\" -g -std=c++26 -O2 -Wall -Wextra -o CMakeFiles/QuadTreeDemo.dir/draw.cpp.o -c \"/home/boopy/dev/Projects/QuadTree Demo/src/draw.cpp\"",
+  "file": "/home/boopy/dev/Projects/QuadTree Demo/src/draw.cpp",
+  "output": "src/CMakeFiles/QuadTreeDemo.dir/draw.cpp.o"
+},
+{
+  "directory": "/home/boopy/dev/Projects/QuadTree Demo/build/src",
+  "command": "/usr/bin/c++  -I\"/home/boopy/dev/Projects/QuadTree Demo/src/include\" -g -std=c++26 -O2 -Wall -Wextra -o CMakeFiles/QuadTreeDemo.dir/quadtree.cpp.o -c \"/home/boopy/dev/Projects/QuadTree Demo/src/quadtree.cpp\"",
+  "file": "/home/boopy/dev/Projects/QuadTree Demo/src/quadtree.cpp",
+  "output": "src/CMakeFiles/QuadTreeDemo.dir/quadtree.cpp.o"
+},
+{
+  "directory": "/home/boopy/dev/Projects/QuadTree Demo/build/src",
+  "command": "/usr/bin/c++  -I\"/home/boopy/dev/Projects/QuadTree Demo/src/include\" -g -std=c++26 -O2 -Wall -Wextra -o CMakeFiles/QuadTreeDemo.dir/ZenityDialog.cpp.o -c \"/home/boopy/dev/Projects/QuadTree Demo/src/ZenityDialog.cpp\"",
+  "file": "/home/boopy/dev/Projects/QuadTree Demo/src/ZenityDialog.cpp",
+  "output": "src/CMakeFiles/QuadTreeDemo.dir/ZenityDialog.cpp.o"
+}
+]

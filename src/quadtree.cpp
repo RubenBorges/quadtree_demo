@@ -1,4 +1,4 @@
-#include <quadtree.h>
+#include <quadtree.hpp>
 #include <cmath>
 #include <algorithm>
 
@@ -18,15 +18,26 @@ void Quad::subdivide() {
 	topRightTree = new Quad(Point(midX, topLeft.y), Point(botRight.x, midY));
 	botLeftTree  = new Quad(Point(topLeft.x, midY), Point(midX, botRight.y));
 	botRightTree = new Quad(Point(midX, midY), botRight);
-
 	subdivided = true;
 
-	// Push existing nodes down into children
 	for (Node* n : nodes) {
 		insertIntoChildren(n);
 	}
 	nodes.clear();
 }
+
+void Quad::traverse(const std::function<void(const Quad*)>& callback) const {
+    callback(this);	// Execute user-defined lambda function on the current quadrant node
+
+    // If this quadrant has been split, recursively pass the lambda to all child branches
+    if (subdivided) {
+        if (topLeftTree)  topLeftTree->traverse(callback);
+        if (topRightTree) topRightTree->traverse(callback);
+        if (botLeftTree)  botLeftTree->traverse(callback);
+        if (botRightTree) botRightTree->traverse(callback);
+    }
+}
+
 
 void Quad::insertIntoChildren(Node* node) {
 	int midX = (topLeft.x + botRight.x) / 2;

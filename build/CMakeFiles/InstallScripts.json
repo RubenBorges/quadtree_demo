@@ -1,0 +1,8 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/boopy/dev/Projects/QuadTree Demo/build/cmake_install.cmake",
+		"/home/boopy/dev/Projects/QuadTree Demo/build/src/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

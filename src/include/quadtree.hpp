@@ -1,5 +1,12 @@
 #pragma once
 #include <vector>
+#include <functional> 
+#include <SFML/Graphics.hpp>
+#include <cstdlib>
+#include <ctime>
+#include <optional>
+#include <algorithm>
+#include "ZenityDialog.hpp"
 
 // enum class GLIB : char {
 // 	SGL = '1', VLKN = '2', DX11 = '3',
@@ -54,6 +61,7 @@ public:
 	void insert(Node* node);
 
 	Node* search(Point p);
+	void traverse(const std::function<void(const Quad*)>& callback) const;
 	void incrementTotalNodes();
 	void incrementTotalNodes(int nodeCount);
 	int nodeCount() const;
