@@ -2,11 +2,6 @@
 #include <vector>
 #include <functional> 
 #include <SFML/Graphics.hpp>
-#include <cstdlib>
-#include <ctime>
-#include <optional>
-#include <algorithm>
-#include "ZenityDialog.hpp"
 
 // enum class GLIB : char {
 // 	SGL = '1', VLKN = '2', DX11 = '3',

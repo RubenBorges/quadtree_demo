@@ -3,7 +3,7 @@
 #include <draw.hpp>
 #include <quadtree.hpp>
 #include <ZenityDialog.hpp>
-#include <CameraController.hpp>  // 🌟 MAKE SURE THIS ENDS IN .hpp, NOT .cpp!
+#include <CameraController.hpp> 
 #include <SFML/Graphics.hpp>
 #include <cstdlib>
 #include <ctime>
@@ -54,9 +54,20 @@ int main(){
             qt.insert(new Node(Point(targetX, targetY), nextId++));
         }
     };
+    auto handleMouseScroll = [&](const sf::Event::MouseWheelScrolled& scroll) {
+        // Only trigger zoom adjustments if it's the vertical scroll wheel
+        if (scroll.wheel == sf::Mouse::Wheel::Vertical) {
+            // scroll.delta is positive when rolling up, negative when rolling down
+            if (scroll.delta > 0.f) {
+                camera.zoom(0.90f); // Zoom In
+            } else if (scroll.delta < 0.f) {
+                camera.zoom(1.10f); // Zoom Out
+            }
+        }
+    };
 
     // =========================================================================
-    // 🎨 RENDERING ENGINE LAMBDAS
+    //  RENDERING ENGINE LAMBDAS
     // =========================================================================
 
     // Lambda to draw the entire Quadtree structure
@@ -118,8 +129,8 @@ int main(){
             else if (const auto* key = event->getIf<sf::Event::KeyPressed>())          handleKeyPress(*key);
             else if (const auto* mouse = event->getIf<sf::Event::MouseButtonPressed>()) handleMousePress(*mouse);
             else if (const auto* move = event->getIf<sf::Event::MouseMoved>())         handleMouseMove(*move);
+            else if (const auto* scroll = event->getIf<sf::Event::MouseWheelScrolled>()) handleMouseScroll(*scroll); 
         }
-
         // 🌟 3. PASS THE DELTA TIME VALUE TO YOUR CAMERA CONTROLLER
         cameraController.update(dt);
         

@@ -8,8 +8,6 @@
 #include <SFML/Graphics.hpp>
 #include <quadtree.hpp>
 
-#include "ZenityDialog.hpp"
-
 // Recursively draw the quadtree regions and any stored nodes
 void drawQuad(sf::RenderTarget& target, const Quad* quad, int depth = 0);
  

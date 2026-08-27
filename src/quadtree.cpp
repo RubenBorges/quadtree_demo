@@ -1,8 +1,5 @@
 #include <quadtree.hpp>
-#include <cmath>
-#include <algorithm>
 
-// Private helpers
 bool Quad::inBoundary(Point p) {
 	return p.x >= topLeft.x && p.x <= botRight.x &&
 		p.y >= topLeft.y && p.y <= botRight.y;
