@@ -71,29 +71,101 @@ int main(){
     // =========================================================================
 
     // Lambda to draw the entire Quadtree structure
-    auto renderQuadTree = [&]() {
-        qt.traverse([&window](const Quad* currentSubTree) {
-            // Draw the boundaries for the current sub-quadrant
-            sf::RectangleShape box;
+    // auto renderQuadTree = [&]() {
+    //     qt.traverse([&window](const Quad* currentSubTree) {
+    //         // Draw the boundaries for the current sub-quadrant
+    //         sf::RectangleShape box;
+    //         auto tl = currentSubTree->getTopLeft();
+    //         auto br = currentSubTree->getBotRight();
+            
+    //         box.setPosition({ static_cast<float>(tl.x), static_cast<float>(tl.y) });
+    //         box.setSize({ static_cast<float>(br.x - tl.x), static_cast<float>(br.y - tl.y) });
+    //         box.setFillColor(sf::Color::Transparent);
+    //         box.setOutlineColor(sf::Color(100, 100, 100)); // Dim Gray outlines
+    //         box.setOutlineThickness(1.0f);
+    //         window.draw(box);
+
+    //         // Draw all individual points residing inside this quadrant leaf
+    //         for (const auto* node : currentSubTree->getNodes()) {
+    //             sf::CircleShape point(2.0f);
+    //             point.setFillColor(sf::Color::Green);
+    //             point.setPosition({ static_cast<float>(node->pos.x - 2), static_cast<float>(node->pos.y - 2) });
+    //             window.draw(point);
+    //         }
+    //     });
+    // };
+  // Add a framerate limit right after window creation
+    window.setFramerateLimit(60); // Or use window.setVerticalSyncEnabled(true);
+   auto renderQuadTree = [&]() {
+        sf::Vector2f center = camera.getCenter();
+        sf::Vector2f size = camera.getSize();
+        sf::FloatRect cameraBounds(center - size / 2.f, size);
+
+        sf::VertexArray gridLines(sf::PrimitiveType::Lines);
+        
+        // 🌟 1. CHANGE THIS FROM Points TO Triangles FOR BATCHED THICK SQUARES
+        sf::VertexArray pointsBatch(sf::PrimitiveType::Triangles);
+
+        qt.traverse([&](const Quad* currentSubTree) {
             auto tl = currentSubTree->getTopLeft();
             auto br = currentSubTree->getBotRight();
             
-            box.setPosition({ static_cast<float>(tl.x), static_cast<float>(tl.y) });
-            box.setSize({ static_cast<float>(br.x - tl.x), static_cast<float>(br.y - tl.y) });
-            box.setFillColor(sf::Color::Transparent);
-            box.setOutlineColor(sf::Color(100, 100, 100)); // Dim Gray outlines
-            box.setOutlineThickness(1.0f);
-            window.draw(box);
+            float fTlX = static_cast<float>(tl.x);
+            float fTlY = static_cast<float>(tl.y);
+            float fWidth = static_cast<float>(br.x - tl.x);
+            float fHeight = static_cast<float>(br.y - tl.y);
 
-            // Draw all individual points residing inside this quadrant leaf
+            sf::FloatRect quadBounds({ fTlX, fTlY }, { fWidth, fHeight });
+
+            if (!cameraBounds.findIntersection(quadBounds)) {
+                return; 
+            }
+
+            // --- Batch Grid Lines ---
+            sf::Color gridColor(100, 100, 100);
+            float fBrX = static_cast<float>(br.x);
+            float fBrY = static_cast<float>(br.y);
+
+            gridLines.append(sf::Vertex({fTlX, fTlY}, gridColor));
+            gridLines.append(sf::Vertex({fBrX, fTlY}, gridColor));
+            gridLines.append(sf::Vertex({fTlX, fBrY}, gridColor));
+            gridLines.append(sf::Vertex({fBrX, fBrY}, gridColor));
+            
+            gridLines.append(sf::Vertex({fTlX, fTlY}, gridColor));
+            gridLines.append(sf::Vertex({fTlX, fBrY}, gridColor));
+            gridLines.append(sf::Vertex({fBrX, fTlY}, gridColor));
+            gridLines.append(sf::Vertex({fBrX, fBrY}, gridColor));
+
+            // UPDATED: BUILD A 4x4 PIXEL THICK SQUARE USING TWO TRIANGLES PER NODE
+            sf::Color pointColor = sf::Color::Green;
+            float radius = 2.0f; // This makes it exactly the same 4x4 size as before!
+
             for (const auto* node : currentSubTree->getNodes()) {
-                sf::CircleShape point(2.0f);
-                point.setFillColor(sf::Color::Green);
-                point.setPosition({ static_cast<float>(node->pos.x - 2), static_cast<float>(node->pos.y - 2) });
-                window.draw(point);
+                float px = static_cast<float>(node->pos.x);
+                float py = static_cast<float>(node->pos.y);
+
+                // Define bounding square offsets
+                float left  = px - radius;
+                float right = px + radius;
+                float top   = py - radius;
+                float bot   = py + radius;
+
+                // Triangle 1 (Top-Left, Top-Right, Bottom-Left)
+                pointsBatch.append(sf::Vertex({left,  top}, pointColor));
+                pointsBatch.append(sf::Vertex({right, top}, pointColor));
+                pointsBatch.append(sf::Vertex({left,  bot}, pointColor));
+
+                // Triangle 2 (Top-Right, Bottom-Right, Bottom-Left)
+                pointsBatch.append(sf::Vertex({right, top}, pointColor));
+                pointsBatch.append(sf::Vertex({right, bot}, pointColor));
+                pointsBatch.append(sf::Vertex({left,  bot}, pointColor));
             }
         });
+
+        if (gridLines.getVertexCount() > 0)   window.draw(gridLines);
+        if (pointsBatch.getVertexCount() > 0) window.draw(pointsBatch);
     };
+
 
     // Lambda to draw the virtual world-space crosshair lines
     auto renderCrosshair = [&]() {
@@ -131,7 +203,7 @@ int main(){
             else if (const auto* move = event->getIf<sf::Event::MouseMoved>())         handleMouseMove(*move);
             else if (const auto* scroll = event->getIf<sf::Event::MouseWheelScrolled>()) handleMouseScroll(*scroll); 
         }
-        // 🌟 3. PASS THE DELTA TIME VALUE TO YOUR CAMERA CONTROLLER
+
         cameraController.update(dt);
         
         // Render Output Framework
